@@ -55,5 +55,5 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@actions.github.com"
           git add CHANGELOG.md
-          git commit -m "【$(date +'%Y-%m-%d')】Update changelog for release ${{ github.event.client_payload.tag }}"
+          git commit --allow-empty -m "【$(date +'%Y-%m-%d')】Update changelog for release ${{ github.event.client_payload.tag }}"
           git push
