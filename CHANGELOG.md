@@ -1,3 +1,3 @@
-## [latest] - 2025-03-25
+## [latest] - 2025-03-26
 - https://github.com/larify/code-server/releases/tag/latest
 
