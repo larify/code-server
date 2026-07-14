@@ -19,9 +19,6 @@
     "editor.tabCompletion": "onlySnippets",
     "editor.wordBasedSuggestions": "off"
   },
-  "[dockercompose]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-  },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -33,9 +30,6 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "[less]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown]": {
     "editor.defaultFormatter": "yzhang.markdown-all-in-one"
@@ -56,25 +50,17 @@
       "document"
     ]
   },
-  "[xml]": {
-    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "auto-close-tag.SublimeText3Mode": true,
-  "auto-close-tag.fullMode": true,
-  "better-comments.highlightPlainText": true,
   "cSpell.diagnosticLevel": "Hint",
-  "cSpell.showStatus": false,
   "cSpell.spellCheckDelayMs": 250,
-  "cSpell.userWords": [
-    "tencent",
-    "lexin",
-    "leco",
-    "fql"
-  ],
+  "cSpell.userWords": [],
+  "chat.disableAIFeatures": true,
+  "chat.tips.enabled": false,
   "debug.console.fontFamily": "FiraMono Nerd Font, JetBrainsMono Nerd Font Mono, Menlo, Monaco, 'Courier New', monospace, default",
   "diffEditor.ignoreTrimWhitespace": false,
   "diffEditor.useInlineViewWhenSpaceIsLimited": false,
-  "editor.bracketPairColorization.enabled": true,
   "editor.codeActionsOnSave": {},
   "editor.codeLensFontFamily": "FiraMono Nerd Font, JetBrainsMono Nerd Font Mono, Menlo, Monaco, Courier New, monospace",
   "editor.detectIndentation": false,
@@ -83,9 +69,9 @@
   "editor.fontLigatures": true,
   "editor.fontSize": 13,
   "editor.fontWeight": "normal",
-  "editor.guides.bracketPairs": true,
-  "editor.guides.highlightActiveBracketPair": true,
+  "editor.guides.bracketPairs": "active",
   "editor.inlineSuggest.enabled": true,
+  "editor.language.colorizedBracketPairs": [],
   "editor.minimap.maxColumn": 120,
   "editor.minimap.renderCharacters": false,
   "editor.renderWhitespace": "all",
@@ -97,6 +83,7 @@
   "editor.unicodeHighlight.nonBasicASCII": false,
   "editor.wordWrapColumn": 120,
   "eslint.codeActionsOnSave.mode": "problems",
+  "eslint.format.enable": true,
   "eslint.quiet": true,
   "explorer.autoRevealExclude": {
     "**/node_modules": false
@@ -104,20 +91,21 @@
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "explorer.openEditors.visible": 0,
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoUpdate": false,
   "extensions.ignoreRecommendations": true,
   "files.associations": {
     "*.js": "javascript",
     "*.ts": "javascript",
-    "*.vue": "vue"
+    "*.vue": "vue",
+    "*.wxml": "html"
   },
   "files.eol": "\n",
   "git-graph.date.type": "Commit Date",
   "git.autofetch": true,
   "git.ignoreLegacyWarning": true,
   "git.ignoreMissingGitWarning": true,
-  "github.copilot.advanced": {},
-  "github.copilot.chat.localeOverride": "zh-CN",
-  "github.copilot.chat.welcomeMessage": "never",
+  "git.openRepositoryInParentFolders": "never",
   "gitlens.advanced.messages": {
     "suppressGitVersionWarning": true
   },
@@ -136,7 +124,6 @@
   "gitlens.defaultDateShortFormat": "YY/MM/DD HH:mm:ss",
   "gitlens.defaultTimeFormat": "HH:mm:ss",
   "gitlens.hovers.avatars": false,
-  "gitlens.proxy": {},
   "gitlens.showWelcomeOnInstall": false,
   "gitlens.showWhatsNewAfterUpgrades": false,
   "gitlens.statusBar.enabled": false,
@@ -146,20 +133,39 @@
   "gitlens.views.formats.commits.description": "${author, }${committerDate}",
   "gitlens.views.remotes.avatars": false,
   "gitlens.views.repositories.avatars": false,
-  "javascript.suggest.jsdoc.generateReturns": false,
-  "javascript.suggest.names": false,
-  "javascript.updateImportsOnFileMove.enabled": "never",
   "js/ts.implicitProjectConfig.strictFunctionTypes": false,
+  "js/ts.preferences.organizeImports": {},
+  "js/ts.reportStyleChecksAsWarnings": false,
+  "js/ts.suggest.jsdoc.generateReturns": false,
+  "js/ts.suggest.names": false,
+  "js/ts.updateImportsOnFileMove.enabled": "never",
+  "js/ts.validate.enabled": false,
+  "json.schemaDownload.trustedDomains": {
+    "https://biomejs.dev": true,
+    "https://json-schema.org/": true,
+    "https://json.schemastore.org/": true,
+    "https://raw.githubusercontent.com/": true,
+    "https://schemastore.azurewebsites.net/": true,
+    "https://www.schemastore.org/": true
+  },
   "markdown.extension.syntax.plainTheme": true,
   "merge-conflict.autoNavigateNextConflict.enabled": true,
   "notebook.cellToolbarLocation": {
     "default": "right",
     "jupyter-notebook": "left"
   },
+  "oneDarkPro.editorTheme": "One Dark Pro Mix",
   "prettier.enableDebugLogs": true,
   "prettier.printWidth": 120,
   "prettier.semi": true,
   "prettier.singleQuote": true,
+  "remote.SSH.remotePlatform": {
+    "gz.bofoi.com": "linux"
+  },
+  "remote.otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
+  "scm.defaultViewMode": "tree",
   "search.exclude": {
     "**/package-lock.json": true
   },
@@ -180,17 +186,17 @@
     "sortJSONValuesReverse": true
   },
   "sortJSON.excludedFiles": [
-    "package.json"
+    "package.json",
+    "package-lock.json"
   ],
-  "svg.preview.mode": "svg",
   "telemetry.telemetryLevel": "off",
   "terminal.integrated.allowMnemonics": true,
-  "terminal.integrated.automationProfile.windows": {},
+  "terminal.integrated.automationProfile.windows": null,
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "underline",
   "terminal.integrated.defaultProfile.osx": "zsh",
-  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
   "terminal.integrated.fontFamily": "FiraMono Nerd Font, Hack Nerd Font Mono, Menlo, Monaco, Courier New, monospace",
   "terminal.integrated.fontWeight": "600",
   "terminal.integrated.lineHeight": 1.2,
@@ -218,11 +224,9 @@
   "terminal.integrated.sendKeybindingsToShell": true,
   "terminal.integrated.shellIntegration.history": 500,
   "terminal.integrated.tabs.enabled": true,
-  "typescript.reportStyleChecksAsWarnings": false,
-  "typescript.updateImportsOnFileMove.enabled": "always",
-  "typescript.validate.enable": false,
   "update.mode": "manual",
   "update.showReleaseNotes": false,
+  "update.titleBar": false,
   "vetur.format.defaultFormatterOptions": {
     "prettier": {
       "arrowParens": "always", // 箭头函数参数只有一个时是否需要有小括号，默认为always。可选<always|avoid>
@@ -250,33 +254,28 @@
       "wrapAttributes": true
     }
   },
-  "volar.format.initialIndent": {
-    "html": true
-  },
-  "vue.complete.casing.props": "kebab",
   "window.openFoldersInNewWindow": "on",
   "window.restoreWindows": "none",
   "window.title": "${activeEditorLong}${separator}${rootName}",
-  "window.zoomLevel": 1,
+  "window.titleBarStyle": "custom",
   "workbench.colorCustomizations": {
     "editor.findMatchBackground": "#d52753dd",
     "editor.findMatchBorder": "#d52753dd",
-    "editor.findMatchHighlightBackground": "#275fe4",
-    "editor.inactiveSelectionBackground": "#275fe4",
+    "editor.findMatchHighlightBackground": "#275fe4dd",
+    "editor.inactiveSelectionBackground": "#275fe4dd",
     "editor.lineHighlightBackground": "#383a42",
-    "editor.selectionHighlightBackground": "#275fe4",
-    "editor.wordHighlightBackground": "#275fe4"
+    "editor.selectionHighlightBackground": "#275fe4dd",
+    "editor.wordHighlightBackground": "#275fe4dd"
   },
-  "workbench.colorTheme": "One Dark Pro Darker",
+  "workbench.colorTheme": "Dark+",
   "workbench.commandPalette.history": 25,
   "workbench.editor.closeOnFileDelete": true,
   "workbench.editor.empty.hint": "hidden",
   "workbench.editor.highlightModifiedTabs": true,
-  "workbench.editorAssociations": {
-    "*.plist": "default"
-  },
+  "workbench.editorAssociations": {},
   "workbench.enableExperiments": false,
   "workbench.iconTheme": "material-icon-theme",
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
   "workbench.settings.enableNaturalLanguageSearch": false,
   "workbench.startupEditor": "none"
 }
