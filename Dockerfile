@@ -1,5 +1,5 @@
 # Start from the code-server Debian base image
-FROM codercom/code-server:latest as base
+FROM codercom/code-server:latest AS base
 
 USER root
 
@@ -15,7 +15,7 @@ RUN mkdir -p ./fonts && mkdir -p /usr/share/fonts/truetype
 COPY fonts ./fonts
 RUN install -m644 ./fonts/*.ttf /usr/share/fonts/truetype/ && rm -rf ./fonts
 
-FROM base as vscode
+FROM base AS vscode
 
 # Apply VS Code settings
 COPY settings.json /root/.local/share/code-server/User/settings.json
@@ -70,7 +70,7 @@ RUN code-server --install-extension formulahendry.auto-close-tag \
 
 # -----------
 
-FROM vscode as runner
+FROM vscode AS runner
 
 # Port
 ENV PORT=8080
