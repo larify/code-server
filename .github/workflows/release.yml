@@ -12,7 +12,7 @@ jobs:
       - name: Download Nerd Fonts
         run: |
           mkdir -p /tmp/fonts
-          INSTALL_FONTS=(Hack JetBrainsMono)
+          INSTALL_FONTS=(FiraCode)
           for i in ${INSTALL_FONTS[@]}; do
             echo "Downloading font ${i} ==> https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${i}.zip"
             wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${i}.zip
@@ -46,7 +46,7 @@ jobs:
           tags: ${{ github.event.client_payload.repo }}:${{ github.event.client_payload.tag }}
           cache-from: type=registry,ref=${{ github.event.client_payload.repo }}:buildcache
           cache-to: type=registry,ref=${{ github.event.client_payload.repo }}:buildcache,mode=max
-      
+
       - name: Update Changelog
         run: |
           echo "## [${{ github.event.client_payload.tag }}] - $(date +'%Y-%m-%d')" > CHANGELOG.md

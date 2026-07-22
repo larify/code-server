@@ -30,7 +30,7 @@ docker run -d \
  -e TZ=Asia/Shanghai \
  -e PUID=$(id -u ${USER}) \
  -e PGID=$(id -g ${USER}) \
- luoweihua7/code-server:latest \
+ ofwh/code-server:latest \
  /root/workspace \
  --bind-addr 0.0.0.0:8080
 ```
@@ -53,12 +53,12 @@ GIT公共配置放置在镜像的 `/root/.gitconfig` 文件中，使用的文件
 默认构建，使用LTS的Node版本，线上最新的pnpm包及其他依赖
 
 ```bash
-docker build -t luoweihua7/code-server:latest .
+docker build -t ofwh/code-server:latest .
 ```
 
 也可以指定默认的Node版本(需指定数字版本)
 
 ```bash
 NODE_VER=20
-docker build --progress=plain -t luoweihua7/code-server:node-v${NODE_VER} -f Dockerfile.node --build-arg NODE_VER=${NODE_VER} .
+docker build --progress=plain -t ofwh/code-server:node-v${NODE_VER} -f Dockerfile.node --build-arg NODE_VER=${NODE_VER} .
 ```
