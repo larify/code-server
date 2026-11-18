@@ -7,8 +7,8 @@ USER root
 # ENV SHELL=/bin/bash
 ENV SHELL=/bin/zsh
 
-# Install unzip + rclone (support for remote filesystem)
-RUN apt-get update && apt-get install curl wget net-tools neovim unzip python-is-python3 -y
+# Install system tools and the libatomic runtime required by Node.js
+RUN apt-get update && apt-get install curl wget net-tools neovim unzip python-is-python3 libatomic1 -y
 
 # Install nerd fonts
 RUN mkdir -p ./fonts && mkdir -p /usr/share/fonts/truetype
