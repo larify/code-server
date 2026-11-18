@@ -1,5 +1,6 @@
 # Start from the code-server Debian base image
-FROM codercom/code-server:latest AS base
+ARG CODE_SERVER_VERSION=latest
+FROM codercom/code-server:${CODE_SERVER_VERSION} AS base
 
 USER root
 
