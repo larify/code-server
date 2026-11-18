@@ -10,26 +10,16 @@ concurrency:
 jobs:
   check-version:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       tag: ${{ steps.upstream.outputs.tag }}
       version: ${{ steps.upstream.outputs.version }}
-      changed: ${{ steps.compare.outputs.changed }}
+      changed: ${{ steps.upstream.outputs.changed }}
       cache-key: ${{ steps.cache.outputs.cache-primary-key }}
     env:
       VERSION_CACHE_PREFIX: code-server-release/${{ github.event.client_payload.repo }}:${{ github.event.client_payload.tag }}/
     steps:
-      - name: Read upstream code-server release
-        id: upstream
-        shell: bash
-        run: |
-          release_tag=$(curl -fsSL --retry 3 https://api.github.com/repos/coder/code-server/releases/latest |
-            jq -er '.tag_name')
-          if [[ ! "$release_tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Invalid upstream code-server tag: $release_tag" >&2
-            exit 1
-          fi
-          printf 'tag=%s\nversion=%s\n' "$release_tag" "${release_tag#v}" >> "$GITHUB_OUTPUT"
-
       - name: Restore last successful version
         id: cache
         uses: actions/cache/restore@v6
@@ -38,18 +28,33 @@ jobs:
           key: ${{ env.VERSION_CACHE_PREFIX }}${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: ${{ env.VERSION_CACHE_PREFIX }}
 
-      - name: Compare upstream and cached versions
-        id: compare
-        env:
-          UPSTREAM_TAG: ${{ steps.upstream.outputs.tag }}
-        run: |
-          cache_file="$RUNNER_TEMP/code-server-release-version"
-          if [[ -f "$cache_file" ]] && [[ "$(<"$cache_file")" == "$UPSTREAM_TAG" ]]; then
-            echo "Upstream version $UPSTREAM_TAG has not changed."
-            echo 'changed=false' >> "$GITHUB_OUTPUT"
-          else
-            echo 'changed=true' >> "$GITHUB_OUTPUT"
-          fi
+      - name: Check upstream code-server version
+        id: upstream
+        uses: actions/github-script@v9
+        with:
+          retries: 3
+          script: |
+            const { existsSync, readFileSync } = require('node:fs')
+            const { join } = require('node:path')
+            const { repository } = await github.graphql(`
+              {
+                repository(owner: "coder", name: "code-server") {
+                  latestRelease { tagName }
+                }
+              }
+            `)
+
+            const tag = repository.latestRelease?.tagName ?? ''
+            if (!/^v[0-9]+\.[0-9]+\.[0-9]+$/.test(tag)) {
+              throw new Error(`Invalid upstream code-server tag: ${tag}`)
+            }
+
+            const cacheFile = join(process.env.RUNNER_TEMP, 'code-server-release-version')
+            const cachedTag = existsSync(cacheFile) ? readFileSync(cacheFile, 'utf8').trim() : ''
+            core.info(`Upstream version: ${tag}, last successful version: ${cachedTag || 'none'}`)
+            core.setOutput('tag', tag)
+            core.setOutput('version', tag.slice(1))
+            core.setOutput('changed', tag !== cachedTag)
 
   docker:
     needs: check-version
@@ -57,23 +62,22 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency:
+      group: publish-code-server-${{ needs.check-version.outputs.tag }}
+      queue: max
     steps:
       - uses: actions/checkout@v6
 
       - name: Download Nerd Fonts
-        run: |
-          mkdir -p /tmp/fonts
-          INSTALL_FONTS=(FiraCode)
-          for i in ${INSTALL_FONTS[@]}; do
-            echo "Downloading font ${i} ==> https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${i}.zip"
-            wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${i}.zip
-            echo "Unzipping font ${i}.zip"
-            unzip -q -o ${i}.zip -d /tmp/fonts
-            rm -rf ${i}.zip
-          done
-          rm -rf ./fonts
-          mkdir -p ./fonts
-          cp /tmp/fonts/*Mono-*.ttf ./fonts
+        uses: robinraju/release-downloader@v1.13
+        with:
+          repository: ryanoasis/nerd-fonts
+          latest: true
+          fileName: FiraCode.zip
+          out-file-path: ${{ runner.temp }}
+
+      - name: Extract FiraCode Mono fonts
+        run: unzip -oj "$RUNNER_TEMP/FiraCode.zip" '*Mono-*.ttf' -d fonts
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -92,22 +96,20 @@ jobs:
         with:
           push: true
           context: .
-          build-args: |
-            NODE_VER=${{ github.event.client_payload.node }}
-            CODE_SERVER_VERSION=${{ needs.check-version.outputs.version }}
+          build-args: CODE_SERVER_VERSION=${{ needs.check-version.outputs.version }}
           platforms: linux/amd64,linux/arm64
           tags: ${{ github.event.client_payload.repo }}:${{ github.event.client_payload.tag }}
           cache-from: type=registry,ref=${{ github.event.client_payload.repo }}:buildcache
           cache-to: type=registry,ref=${{ github.event.client_payload.repo }}:buildcache,mode=max
 
       - name: Publish GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ needs.check-version.outputs.tag }}
-        run: |
-          gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 ||
-            gh release create "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --generate-notes ||
-            gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY"
+        uses: ncipollo/release-action@v1.20.0
+        with:
+          tag: ${{ needs.check-version.outputs.tag }}
+          commit: ${{ github.sha }}
+          generateReleaseNotes: true
+          makeLatest: true
+          skipIfReleaseExists: true
 
       - name: Record successful version
         env:
