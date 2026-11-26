@@ -75,6 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
     concurrency:
       group: publish-code-server
       queue: max
@@ -117,6 +118,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Resolve GHCR image name
+        id: ghcr
+        shell: bash
+        run: printf 'image=ghcr.io/%s:%s\n' "${GITHUB_REPOSITORY,,}" "$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
@@ -125,7 +138,10 @@ jobs:
           context: .
           build-args: CODE_SERVER_VERSION=${{ needs.check-version.outputs.version }}
           platforms: linux/amd64,linux/arm64
-          tags: ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
+          tags: |
+            ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
+            ${{ steps.ghcr.outputs.image }}
+          labels: org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
 
       - name: Replace Git tag
         if: ${{ inputs.force-rebuild }}
@@ -133,12 +149,28 @@ jobs:
           UPSTREAM_TAG: ${{ needs.check-version.outputs.tag }}
         run: git push --force origin "HEAD:refs/tags/$UPSTREAM_TAG"
 
+      - name: Write manual release notes
+        if: ${{ inputs.force-rebuild }}
+        env:
+          GHCR_IMAGE: ${{ steps.ghcr.outputs.image }}
+          UPSTREAM_TAG: ${{ needs.check-version.outputs.tag }}
+        run: |
+          {
+            printf '### Container images\n\n'
+            printf -- '- Docker Hub `%s:%s`\n' "$IMAGE_REPO" "$IMAGE_TAG"
+            printf -- '- GHCR `%s`\n\n' "$GHCR_IMAGE"
+            printf 'Upstream [code-server %s](https://github.com/coder/code-server/releases/tag/%s)\n\n' "$UPSTREAM_TAG" "$UPSTREAM_TAG"
+            printf 'Built from `%s` in [workflow run %s (attempt %s)](%s/%s/actions/runs/%s/attempts/%s).\n' \
+              "$GITHUB_SHA" "$GITHUB_RUN_NUMBER" "$GITHUB_RUN_ATTEMPT" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT"
+          } > "$RUNNER_TEMP/code-server-release.md"
+
       - name: Publish GitHub Release
         uses: ncipollo/release-action@v1.20.0
         with:
           token: ${{ inputs.force-rebuild && secrets.ACTIONS_TRIGGER_PAT || github.token }}
           tag: ${{ needs.check-version.outputs.tag }}
           commit: ${{ github.sha }}
+          bodyFile: ${{ inputs.force-rebuild && format('{0}/code-server-release.md', runner.temp) || '' }}
           generateReleaseNotes: true
           makeLatest: true
           allowUpdates: ${{ inputs.force-rebuild || false }}
