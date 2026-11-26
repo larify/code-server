@@ -8,6 +8,8 @@ on:
         type: boolean
         default: false
     secrets:
+      ACTIONS_TRIGGER_PAT:
+        required: true
       DOCKERHUB_USERNAME:
         required: true
       DOCKERHUB_TOKEN:
@@ -80,6 +82,16 @@ jobs:
       IMAGE_REPO: ${{ inputs.force-rebuild && github.repository || github.event.client_payload.repo }}
       IMAGE_TAG: ${{ inputs.force-rebuild && 'latest' || github.event.client_payload.tag }}
     steps:
+      - name: Check manual release credentials
+        if: ${{ inputs.force-rebuild }}
+        env:
+          RELEASE_TOKEN: ${{ secrets.ACTIONS_TRIGGER_PAT }}
+        run: |
+          if [ -z "$RELEASE_TOKEN" ]; then
+            echo "::error::Manual rebuild requires the ACTIONS_TRIGGER_PAT secret."
+            exit 1
+          fi
+
       - uses: actions/checkout@v6
 
       - name: Download Nerd Fonts
@@ -114,8 +126,6 @@ jobs:
           build-args: CODE_SERVER_VERSION=${{ needs.check-version.outputs.version }}
           platforms: linux/amd64,linux/arm64
           tags: ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
-          cache-from: ${{ !inputs.force-rebuild && format('type=registry,ref={0}:buildcache', env.IMAGE_REPO) || '' }}
-          cache-to: ${{ !inputs.force-rebuild && format('type=registry,ref={0}:buildcache,mode=max', env.IMAGE_REPO) || '' }}
 
       - name: Replace Git tag
         if: ${{ inputs.force-rebuild }}
@@ -126,6 +136,7 @@ jobs:
       - name: Publish GitHub Release
         uses: ncipollo/release-action@v1.20.0
         with:
+          token: ${{ inputs.force-rebuild && secrets.ACTIONS_TRIGGER_PAT || github.token }}
           tag: ${{ needs.check-version.outputs.tag }}
           commit: ${{ github.sha }}
           generateReleaseNotes: true

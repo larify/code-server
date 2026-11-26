@@ -37,22 +37,22 @@ extensions="\
     jock.svg \
     kisstkondoros.vscode-gutter-preview \
     mhutchie.git-graph \
-    mikestead.dotenv \
     ms-azuretools.vscode-containers \
     pkief.material-icon-theme \
+    redhat.vscode-yaml \
     richie5um2.vscode-sort-json \
     streetsidesoftware.code-spell-checker \
     tamasfe.even-better-toml \
-    vstirbu.vscode-mermaid-preview \
     vue.volar \
-    wayou.vscode-todo-highlight \
     wix.vscode-import-cost \
+    yy0931.vscode-sqlite3-editor \
     yzhang.markdown-all-in-one \
-    zhuangtongfa.material-theme \
 "
 
 for ext in $extensions; do
-  [ -n "$ext" ] && /usr/bin/code-server --install-extension "$ext"
+  if ! /usr/bin/code-server --install-extension "$ext"; then
+    printf 'Failed to install extension: %s\n' "$ext" >&2
+  fi
 done
 
 # Start server

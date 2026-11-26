@@ -11,5 +11,6 @@ jobs:
     with:
       force-rebuild: true
     secrets:
+      ACTIONS_TRIGGER_PAT: ${{ secrets.ACTIONS_TRIGGER_PAT }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

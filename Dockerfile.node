@@ -21,9 +21,9 @@ FROM base AS vscode
 ARG NODE_VER=20
 
 # Apply VS Code settings
-COPY src/settings.json /root/.local/share/code-server/User/settings.json
+COPY settings.json /root/.local/share/code-server/User/settings.json
 
-COPY src/dotfiles /root/
+COPY dotfiles /root/
 
 # RUN curl https://rclone.org/install.sh | sudo bash
 
@@ -41,31 +41,6 @@ RUN /bin/zsh -c "source $HOME/.nvm/nvm.sh \
 # You can add custom software and dependencies for your environment below
 # -----------
 
-# Install a VS Code extension:
-# Note: we use a different marketplace than VS Code. See https://github.com/cdr/code-server/blob/main/docs/FAQ.md#differences-compared-to-vs-code
-# RUN code-server --install-extension esbenp.prettier-vscode
-
-RUN code-server --install-extension formulahendry.auto-close-tag \
-  && code-server --install-extension formulahendry.auto-rename-tag \
-  && code-server --install-extension mgmcdermott.vscode-language-babel \
-  && code-server --install-extension aaron-bond.better-comments \
-  && code-server --install-extension formulahendry.code-runner \
-  && code-server --install-extension streetsidesoftware.code-spell-checker \
-  && code-server --install-extension dbaeumer.vscode-eslint \
-  && code-server --install-extension mhutchie.git-graph \
-  && code-server --install-extension eamodio.gitlens \
-  && code-server --install-extension wix.vscode-import-cost \
-  && code-server --install-extension yzhang.markdown-all-in-one \
-  && code-server --install-extension esbenp.prettier-vscode \
-  && code-server --install-extension richie5um2.vscode-sort-json \
-  && code-server --install-extension bradlc.vscode-tailwindcss \
-  && code-server --install-extension donjayamanne.githistory \
-  && code-server --install-extension zhuangtongfa.material-theme \
-  && code-server --install-extension PKief.material-icon-theme \
-  && code-server --install-extension Vue.volar \
-  && code-server --install-extension redhat.vscode-yaml \
-  && code-server --install-extension ms-azuretools.vscode-docker
-
 # Install apt packages:
 # RUN sudo apt-get install -y ubuntu-make
 
@@ -80,7 +55,7 @@ FROM vscode AS runner
 ENV PORT=8080
 
 # Use our custom entrypoint script first
-COPY src/entrypoint.sh /usr/bin/code-server-entrypoint.sh
+COPY entrypoint.sh /usr/bin/code-server-entrypoint.sh
 RUN chmod +x /usr/bin/code-server-entrypoint.sh
 
 ENTRYPOINT ["/usr/bin/code-server-entrypoint.sh"]

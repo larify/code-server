@@ -1,4 +1,4 @@
-name: DailyBuild
+name: Daily Build
 
 on:
   workflow_dispatch:
