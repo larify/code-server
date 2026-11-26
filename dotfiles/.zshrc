@@ -13,36 +13,31 @@ FINISH="%{$terminfo[sgr0]%}"
 #命令行末尾现实时间
 #RPROMPT=$(echo "$RED%D %T$FINISH")
 #命令提示符
-PROMPT=$(echo "$CYAN%n$WHITE@$YELLOW%M$WHITE: $GREEN%~ $_BLUE»$FINISH ")
+# PROMPT=$(echo "$CYAN%n$WHITE@$YELLOW%M$WHITE: $GREEN%~ $_BLUE»$FINISH ")
+PROMPT=$(echo "$MAGENTA%n$WHITE: $GREEN%~ $_BLUE»$FINISH ")
 
 # Git 目录下右侧显示分支名
 if command -v git &> /dev/null; then
-  autoload -Uz vcs_info
-  precmd_vcs_info() { vcs_info }
-  precmd_functions+=( precmd_vcs_info )
-  prompt_node() {
-    if which node &> /dev/null; then
-      echo "$GREEN\ue718 $(node -v)"
-    fi
-  }
-  prompt_git() {
-    if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]; then
-      echo "$(prompt_node)  $BLUE\ue0a0 ${vcs_info_msg_0_%% }$FINISH"
-    else
-      echo "$(prompt_node) $FINISH"
-    fi
-  }
-  setopt prompt_subst
-  # RPROMPT=\$vcs_info_msg_0_
-  RPROMPT='$(prompt_git)'
-  zstyle ':vcs_info:git:*' formats '%b'
+    autoload -Uz vcs_info
+    precmd_vcs_info() { vcs_info }
+    precmd_functions+=( precmd_vcs_info )
+    prompt_node() {
+        if which node &> /dev/null; then
+            echo "$GREEN\ue718 $(node -v)"
+        fi
+    }
+    prompt_git() { [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ] && echo "$(prompt_node)  $BLUE\ue0a0 ${vcs_info_msg_0_%% }$FINISH" }
+    setopt prompt_subst
+    # RPROMPT=\$vcs_info_msg_0_
+    RPROMPT='$(prompt_git)'
+    zstyle ':vcs_info:git:*' formats '%b'
 
-  #标题栏、任务栏样式{{{
-  case $TERM in (*xterm*|*rxvt*|(dt|k|E)term)
-  precmd () { print -Pn "\e]0;%n@%M: %~\a" }
-  preexec () { print -Pn "\e]0;%n@%M: %~\ $1\a" }
-  ;;
-  esac
+    #标题栏、任务栏样式{{{
+    case $TERM in (*xterm*|*rxvt*|(dt|k|E)term)
+    precmd () { print -Pn "\e]0;%n@%M: %~\a" }
+    preexec () { print -Pn "\e]0;%n@%M: %~\ $1\a" }
+    ;;
+    esac
 fi
 #}}}
 
@@ -162,15 +157,6 @@ special:bold      #特殊字符
 isearch:underline)#搜索时使用的关键字
 #}}}
 
-#命令别名 {{{
-alias ls='ls -F'
-alias l='ls -lAh'
-alias ll='ls -lh'
-alias grep='grep --color=auto'
-alias h='history'
-alias path='print -l $path'
-alias -g ...='../..'
-
 #[Esc][h] man 当前命令时，显示简短说明
 alias run-help >&/dev/null && unalias run-help
 autoload run-help
@@ -191,7 +177,9 @@ setopt EXTENDED_GLOB
 #promptinit
 #prompt redhat
 
-setopt correctall
+setopt nocorrectall # 禁用命令行参数的自动拼写纠正
+# setopt correct # 启用命令拼写纠正
+# setopt correctall  # 启用命令和参数的拼写纠正
 autoload compinstall
 
 #漂亮又实用的命令高亮界面
@@ -199,29 +187,29 @@ setopt extended_glob
 TOKENS_FOLLOWED_BY_COMMANDS=('|' '||' ';' '&' '&&' 'sudo' 'do' 'time' 'strace')
 
 recolor-cmd() {
-  region_highlight=()
-  colorize=true
-  start_pos=0
-  for arg in ${(z)BUFFER}; do
-    ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
-    ((end_pos=$start_pos+${#arg}))
-    if $colorize; then
-      colorize=false
-      res=$(LC_ALL=C builtin type $arg 2>/dev/null)
-      case $res in
-        *'reserved word'*)   style="fg=magenta,bold";;
-        *'alias for'*)       style="fg=cyan,bold";;
-        *'shell builtin'*)   style="fg=yellow,bold";;
-        *'shell function'*)  style='fg=green,bold';;
-        *"$arg is"*)
-            [[ $arg = 'sudo' ]] && style="fg=red,bold" || style="fg=blue,bold";;
-        *)                   style='none,bold';;
-      esac
-      region_highlight+=("$start_pos $end_pos $style")
-    fi
-    [[ ${${TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
-    start_pos=$end_pos
-  done
+    region_highlight=()
+    colorize=true
+    start_pos=0
+    for arg in ${(z)BUFFER}; do
+        ((start_pos+=${#BUFFER[$start_pos+1,-1]}-${#${BUFFER[$start_pos+1,-1]## #}}))
+        ((end_pos=$start_pos+${#arg}))
+        if $colorize; then
+            colorize=false
+            res=$(LC_ALL=C builtin type $arg 2>/dev/null)
+            case $res in
+                *'reserved word'*)   style="fg=magenta,bold";;
+                *'alias for'*)       style="fg=cyan,bold";;
+                *'shell builtin'*)   style="fg=yellow,bold";;
+                *'shell function'*)  style='fg=green,bold';;
+                *"$arg is"*)
+                    [[ $arg = 'sudo' ]] && style="fg=red,bold" || style="fg=blue,bold";;
+                *)                   style='none,bold';;
+            esac
+            region_highlight+=("$start_pos $end_pos $style")
+        fi
+        [[ ${${TOKENS_FOLLOWED_BY_COMMANDS[(r)${arg//|/\|}]}:+yes} = 'yes' ]] && colorize=true
+        start_pos=$end_pos
+    done
 }
 check-cmd-self-insert() { zle .self-insert && recolor-cmd }
 check-cmd-backward-delete-char() { zle .backward-delete-char && recolor-cmd }
@@ -231,14 +219,12 @@ zle -N backward-delete-char check-cmd-backward-delete-char
 
 export NO_PROXY=localhost,127.0.0.1,172.,10.,192.
 
-# export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-# export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
-
-export LC_ALL=en_US.UTF-8
-
 # 自定义的方法
 if [ -d ~/.plugins ]; then
     for f in ~/.plugins/*.sh; do
         source $f
     done
 fi
+
+# 移除重复
+typeset -U path

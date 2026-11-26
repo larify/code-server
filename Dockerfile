@@ -42,26 +42,28 @@ RUN /bin/zsh -c "source $HOME/.nvm/nvm.sh \
 # Note: we use a different marketplace than VS Code. See https://github.com/cdr/code-server/blob/main/docs/FAQ.md#differences-compared-to-vs-code
 # RUN code-server --install-extension esbenp.prettier-vscode
 
-RUN code-server --install-extension formulahendry.auto-close-tag \
-  && code-server --install-extension formulahendry.auto-rename-tag \
-  && code-server --install-extension mgmcdermott.vscode-language-babel \
-  && code-server --install-extension aaron-bond.better-comments \
-  && code-server --install-extension formulahendry.code-runner \
-  && code-server --install-extension streetsidesoftware.code-spell-checker \
-  && code-server --install-extension dbaeumer.vscode-eslint \
-  && code-server --install-extension mhutchie.git-graph \
-  && code-server --install-extension eamodio.gitlens \
-  && code-server --install-extension wix.vscode-import-cost \
-  && code-server --install-extension yzhang.markdown-all-in-one \
-  && code-server --install-extension esbenp.prettier-vscode \
-  && code-server --install-extension richie5um2.vscode-sort-json \
-  && code-server --install-extension bradlc.vscode-tailwindcss \
+RUN code-server --install-extension dbaeumer.vscode-eslint \
   && code-server --install-extension donjayamanne.githistory \
-  && code-server --install-extension zhuangtongfa.material-theme \
-  && code-server --install-extension PKief.material-icon-theme \
-  && code-server --install-extension Vue.volar \
+  && code-server --install-extension eamodio.gitlens \
+  && code-server --install-extension esbenp.prettier-vscode \
+  && code-server --install-extension jock.svg \
+  && code-server --install-extension kisstkondoros.vscode-gutter-preview \
+  && code-server --install-extension mhutchie.git-graph \
+  && code-server --install-extension ms-azuretools.vscode-containers \
+  && code-server --install-extension ms-vscode-remote.remote-ssh \
+  && code-server --install-extension ms-vscode-remote.remote-ssh-edit \
+  && code-server --install-extension ms-vscode-remote.vscode-remote-extensionpack \
+  && code-server --install-extension ms-vscode.remote-explorer \
+  && code-server --install-extension ms-vscode.remote-server \
+  && code-server --install-extension pkief.material-icon-theme \
   && code-server --install-extension redhat.vscode-yaml \
-  && code-server --install-extension ms-azuretools.vscode-docker
+  && code-server --install-extension richie5um2.vscode-sort-json \
+  && code-server --install-extension streetsidesoftware.code-spell-checker \
+  && code-server --install-extension tamasfe.even-better-toml \
+  && code-server --install-extension vue.volar \
+  && code-server --install-extension wix.vscode-import-cost \
+  && code-server --install-extension yy0931.vscode-sqlite3-editor \
+  && code-server --install-extension yzhang.markdown-all-in-one
 
 # Install apt packages:
 # RUN sudo apt-get install -y ubuntu-make

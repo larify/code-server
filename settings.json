@@ -1,111 +1,51 @@
 {
-  "[css]": {
-    "cSpell.fixSpellingWithRenameProvider": false,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.suggest.insertMode": "replace",
-    "gitlens.codeLens.scopes": [
-      "document"
-    ]
-  },
-  "[dart]": {
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
-    "editor.rulers": [
-      80
-    ],
-    "editor.selectionHighlight": false,
-    "editor.suggest.snippetsPreventQuickSuggestions": false,
-    "editor.suggestSelection": "first",
-    "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": "off"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "[markdown]": {
-    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[vue]": {
-    "editor.autoIndent": "keep",
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "gitlens.codeLens.scopes": [
-      "document"
-    ]
-  },
-  "[yaml]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
   "cSpell.diagnosticLevel": "Hint",
   "cSpell.spellCheckDelayMs": 250,
-  "cSpell.userWords": [],
   "chat.disableAIFeatures": true,
-  "chat.tips.enabled": false,
-  "debug.console.fontFamily": "FiraMono Nerd Font, Menlo, Monaco, 'Courier New', monospace, default",
-  "diffEditor.ignoreTrimWhitespace": false,
+  "debug.console.fontFamily": "FiraCode Nerd Font, Hack Nerd Font, Menlo, Monaco, monospace, default",
   "diffEditor.useInlineViewWhenSpaceIsLimited": false,
-  "editor.codeActionsOnSave": {},
-  "editor.codeLensFontFamily": "FiraMono Nerd Font, Menlo, Monaco, Courier New, monospace",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "never"
+  },
+  "editor.codeLensFontFamily": "FiraCode Nerd Font, Hack Nerd Font, Menlo, Monaco, monospace",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": false,
   "editor.find.autoFindInSelection": "multiline",
-  "editor.fontFamily": "FiraMono Nerd Font, Menlo, Monaco, Courier New, monospace",
+  "editor.fontFamily": "FiraCode Nerd Font, Hack Nerd Font, Menlo, Monaco, monospace",
   "editor.fontLigatures": true,
   "editor.fontSize": 13,
-  "editor.fontWeight": "normal",
-  "editor.guides.bracketPairs": "active",
-  "editor.inlineSuggest.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.inlayHints.fontFamily": "FiraCode Nerd Font, Hack Nerd Font, Menlo, Monaco, monospace",
+  "editor.inlayHints.padding": true,
   "editor.language.colorizedBracketPairs": [],
-  "editor.minimap.maxColumn": 120,
+  "editor.linkedEditing": true,
+  "editor.minimap.maxColumn": 80,
   "editor.minimap.renderCharacters": false,
+  "editor.minimap.sectionHeaderFontSize": 8,
   "editor.renderWhitespace": "all",
-  "editor.scrollBeyondLastLine": true,
-  "editor.selectionHighlight": true,
+  "editor.scrollbar.verticalScrollbarSize": 12,
+  "editor.smoothScrolling": true,
   "editor.tabSize": 2,
   "editor.unicodeHighlight.includeStrings": false,
   "editor.unicodeHighlight.invisibleCharacters": false,
   "editor.unicodeHighlight.nonBasicASCII": false,
   "editor.wordWrapColumn": 120,
-  "eslint.codeActionsOnSave.mode": "problems",
   "eslint.format.enable": true,
   "eslint.quiet": true,
-  "explorer.autoRevealExclude": {
-    "**/node_modules": false
-  },
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
-  "explorer.openEditors.visible": 0,
   "extensions.autoCheckUpdates": false,
-  "extensions.autoUpdate": false,
+  "extensions.autoUpdate": "off",
   "extensions.ignoreRecommendations": true,
-  "files.associations": {
-    "*.js": "javascript",
-    "*.ts": "javascript",
-    "*.vue": "vue",
-    "*.wxml": "html"
-  },
   "files.eol": "\n",
   "git-graph.date.type": "Commit Date",
+  "git-graph.dialog.fetchRemote.prune": true,
+  "git-graph.dialog.fetchRemote.pruneTags": true,
   "git.autofetch": true,
+  "git.blame.editorDecoration.enabled": true,
+  "git.enableSmartCommit": true,
   "git.ignoreLegacyWarning": true,
   "git.ignoreMissingGitWarning": true,
-  "git.openRepositoryInParentFolders": "never",
   "gitlens.advanced.messages": {
     "suppressGitVersionWarning": true
   },
@@ -113,9 +53,7 @@
   "gitlens.blame.dateFormat": "YYYY/MM/DD HH:mm:ss",
   "gitlens.blame.format": "${date} - ${author|25}",
   "gitlens.codeLens.authors.enabled": false,
-  "gitlens.codeLens.scopes": [
-    "containers"
-  ],
+  "gitlens.codeLens.scopes": ["containers"],
   "gitlens.currentLine.dateFormat": "YYYY/MM/DD hh:mm:ss",
   "gitlens.currentLine.format": "${date, }${author}${' via 'pullRequest}${ • message|150?}",
   "gitlens.currentLine.uncommittedChangesFormat": "${date, }${author}${' via 'pullRequest}${ • message|150?}",
@@ -123,8 +61,9 @@
   "gitlens.defaultDateLocale": "zh-CN",
   "gitlens.defaultDateShortFormat": "YY/MM/DD HH:mm:ss",
   "gitlens.defaultTimeFormat": "HH:mm:ss",
+  "gitlens.graph.sidebar.enabled": false,
   "gitlens.hovers.avatars": false,
-  "gitlens.showWelcomeOnInstall": false,
+  "gitlens.proxy": {},
   "gitlens.showWhatsNewAfterUpgrades": false,
   "gitlens.statusBar.enabled": false,
   "gitlens.views.branches.avatars": false,
@@ -133,131 +72,26 @@
   "gitlens.views.formats.commits.description": "${author, }${committerDate}",
   "gitlens.views.remotes.avatars": false,
   "gitlens.views.repositories.avatars": false,
-  "js/ts.implicitProjectConfig.strictFunctionTypes": false,
-  "js/ts.preferences.organizeImports": {},
   "js/ts.reportStyleChecksAsWarnings": false,
-  "js/ts.suggest.jsdoc.generateReturns": false,
+  "js/ts.suggest.enabled": false,
   "js/ts.suggest.names": false,
-  "js/ts.updateImportsOnFileMove.enabled": "never",
-  "js/ts.validate.enabled": false,
-  "json.schemaDownload.trustedDomains": {
-    "https://biomejs.dev": true,
-    "https://json-schema.org/": true,
-    "https://json.schemastore.org/": true,
-    "https://raw.githubusercontent.com/": true,
-    "https://schemastore.azurewebsites.net/": true,
-    "https://www.schemastore.org/": true
-  },
-  "markdown.extension.syntax.plainTheme": true,
+  "js/ts.tsserver.maxMemory": 2048,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "markdown.preview.fontFamily": "FiraCode Nerd Font, Hack Nerd Font, -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif",
   "merge-conflict.autoNavigateNextConflict.enabled": true,
-  "notebook.cellToolbarLocation": {
-    "default": "right",
-    "jupyter-notebook": "left"
-  },
-  "oneDarkPro.editorTheme": "One Dark Pro Mix",
-  "prettier.enableDebugLogs": true,
-  "prettier.printWidth": 120,
-  "prettier.semi": true,
-  "prettier.singleQuote": true,
-  "remote.SSH.remotePlatform": {
-    "gz.bofoi.com": "linux"
-  },
-  "remote.otherPortsAttributes": {
-    "onAutoForward": "ignore"
-  },
-  "scm.defaultViewMode": "tree",
-  "search.exclude": {
-    "**/package-lock.json": true
-  },
-  "security.workspace.trust.enabled": false,
-  "security.workspace.trust.untrustedFiles": "open",
-  "settingsSync.ignoredExtensions": [],
-  "settingsSync.ignoredSettings": [],
-  "sortJSON.contextMenu": {
-    "sortJSON": true,
-    "sortJSONAlphaNum": false,
-    "sortJSONAlphaNumReverse": false,
-    "sortJSONKeyLength": false,
-    "sortJSONKeyLengthReverse": false,
-    "sortJSONReverse": false,
-    "sortJSONType": false,
-    "sortJSONTypeReverse": false,
-    "sortJSONValues": false,
-    "sortJSONValuesReverse": true
-  },
-  "sortJSON.excludedFiles": [
-    "package.json",
-    "package-lock.json"
-  ],
+  "redhat.telemetry.enabled": false,
   "telemetry.telemetryLevel": "off",
-  "terminal.integrated.allowMnemonics": true,
-  "terminal.integrated.automationProfile.windows": null,
-  "terminal.integrated.copyOnSelection": true,
-  "terminal.integrated.cursorBlinking": true,
-  "terminal.integrated.cursorStyle": "underline",
-  "terminal.integrated.defaultProfile.osx": "zsh",
-  "terminal.integrated.enableMultiLinePasteWarning": "never",
-  "terminal.integrated.fontFamily": "FiraMono Nerd Font, Menlo, Monaco, Courier New, monospace",
-  "terminal.integrated.fontWeight": "600",
+  "terminal.integrated.fontFamily": "FiraCode Nerd Font, Hack Nerd Font, Menlo, Monaco, Courier New, monospace",
+  "terminal.integrated.fontWeight": "500",
   "terminal.integrated.lineHeight": 1.2,
   "terminal.integrated.persistentSessionReviveProcess": "never",
-  "terminal.integrated.persistentSessionScrollback": 10000,
-  "terminal.integrated.profiles.windows": {
-    "Command Prompt": {
-      "args": [],
-      "icon": "terminal-cmd",
-      "path": [
-        "${env:windir}\\Sysnative\\cmd.exe",
-        "${env:windir}\\System32\\cmd.exe"
-      ]
-    },
-    "Git Bash": {
-      "source": "Git Bash"
-    },
-    "PowerShell": {
-      "icon": "terminal-powershell",
-      "source": "PowerShell"
-    }
-  },
-  "terminal.integrated.rightClickBehavior": "default",
-  "terminal.integrated.scrollback": 10000,
-  "terminal.integrated.sendKeybindingsToShell": true,
-  "terminal.integrated.shellIntegration.history": 500,
-  "terminal.integrated.tabs.enabled": true,
   "update.mode": "manual",
   "update.showReleaseNotes": false,
   "update.titleBar": false,
-  "vetur.format.defaultFormatterOptions": {
-    "prettier": {
-      "arrowParens": "always", // 箭头函数参数只有一个时是否需要有小括号，默认为always。可选<always|avoid>
-      "bracketSpacing": true, // 对象大括号直接是否有空格，默认为true。可选<true|false>
-      "endOfLine": "lf", // 结尾换行符，默认为lf。可选<lf|cr|crlf|auto>
-      "htmlWhitespaceSensitivity": "css", // html内容是否敏感，默认为css。可选<css|strict|ignore>
-      "insertPragma": false, // 在文件顶部插入@format的特殊注释，标明已经被Prettier格式化过，默认为false。可选<true|false>
-      "jsxBracketSameLine": false, // [已废弃] jsx文件中的 ">" 标签是否放到单独的一行，默认为false。可选<true|false>
-      "jsxSingleQuote": false, // jsx语法中使用单引号，默认为false。可选<true|false>
-      "printWidth": 120, // 每行最大宽度，超过将自动换行，默认为80。可选<number>
-      "proseWrap": "preserve", // 默认情况下，Prettier会因为使用了一些折行敏感型的渲染器（如GitHub comment 和 BitBucket）而按照markdown文本样式进行折行，默认为preserve。可选<always|never|preserve>
-      "quoteProps": "as-needed", // 对象的属性名是否使用引号，默认为as-needed。可选<as-needed|consistent|preserve>
-      "requirePragma": false, // 严格按照文件顶部的一些特殊的注释格式化代码，默认为false。可选<true|false>
-      "semi": true, // 是否语句末尾添加分号，默认为true。可选<true|false>
-      "singleQuote": true, // 使用单引号而非双引号，默认为false。可选<true|false>
-      "tabWidth": 2, // 设置工具每一个水平缩进的空格数，默认为2。可选<number>
-      "trailingComma": "es5", // 是否使用尾逗号，默认为es5。可选<none|es5|all>
-      "useTabs": false, // 是否使用tab进行缩进，默认为false，表示用空格进行缩减
-      "vueIndentScriptAndStyle": false // Vue文件中脚本和样式缩进，默认为false。可选<true|false>
-    },
-    "prettyhtml": {
-      "printWidth": 120,
-      "singleQuote": true,
-      "sortAttributes": true,
-      "wrapAttributes": true
-    }
-  },
   "window.openFoldersInNewWindow": "on",
   "window.restoreWindows": "none",
-  "window.title": "${activeEditorLong}${separator}${rootName}",
-  "window.titleBarStyle": "custom",
+  "window.title": "${rootName}${separator}${activeEditorMedium}",
+  "window.titleSeparator": " ~ ",
   "workbench.colorCustomizations": {
     "editor.findMatchBackground": "#d52753dd",
     "editor.findMatchBorder": "#d52753dd",
@@ -267,15 +101,10 @@
     "editor.selectionHighlightBackground": "#275fe4dd",
     "editor.wordHighlightBackground": "#275fe4dd"
   },
-  "workbench.colorTheme": "Dark+",
-  "workbench.commandPalette.history": 25,
   "workbench.editor.closeOnFileDelete": true,
   "workbench.editor.empty.hint": "hidden",
+  "workbench.editor.enablePreview": false,
   "workbench.editor.highlightModifiedTabs": true,
-  "workbench.editorAssociations": {},
-  "workbench.enableExperiments": false,
   "workbench.iconTheme": "material-icon-theme",
-  "workbench.secondarySideBar.defaultVisibility": "hidden",
-  "workbench.settings.enableNaturalLanguageSearch": false,
   "workbench.startupEditor": "none"
 }
