@@ -2,9 +2,19 @@ name: Release
 
 on:
   repository_dispatch:
+  workflow_call:
+    inputs:
+      force-rebuild:
+        type: boolean
+        default: false
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.client_payload.repo }}:${{ github.event.client_payload.tag }}
+  group: ${{ inputs.force-rebuild && github.run_id || format('{0}-{1}:{2}', github.workflow, github.event.client_payload.repo, github.event.client_payload.tag) }}
   cancel-in-progress: false
 
 jobs:
@@ -21,6 +31,7 @@ jobs:
       VERSION_CACHE_PREFIX: code-server-release/${{ github.event.client_payload.repo }}:${{ github.event.client_payload.tag }}/
     steps:
       - name: Restore last successful version
+        if: ${{ !inputs.force-rebuild }}
         id: cache
         uses: actions/cache/restore@v6
         with:
@@ -58,13 +69,16 @@ jobs:
 
   docker:
     needs: check-version
-    if: ${{ needs.check-version.outputs.changed == 'true' }}
+    if: ${{ inputs.force-rebuild || needs.check-version.outputs.changed == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
     concurrency:
-      group: publish-code-server-${{ needs.check-version.outputs.tag }}
+      group: publish-code-server
       queue: max
+    env:
+      IMAGE_REPO: ${{ inputs.force-rebuild && github.repository || github.event.client_payload.repo }}
+      IMAGE_TAG: ${{ inputs.force-rebuild && 'latest' || github.event.client_payload.tag }}
     steps:
       - uses: actions/checkout@v6
 
@@ -95,12 +109,19 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
+          no-cache: ${{ inputs.force-rebuild || false }}
           context: .
           build-args: CODE_SERVER_VERSION=${{ needs.check-version.outputs.version }}
           platforms: linux/amd64,linux/arm64
-          tags: ${{ github.event.client_payload.repo }}:${{ github.event.client_payload.tag }}
-          cache-from: type=registry,ref=${{ github.event.client_payload.repo }}:buildcache
-          cache-to: type=registry,ref=${{ github.event.client_payload.repo }}:buildcache,mode=max
+          tags: ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
+          cache-from: ${{ !inputs.force-rebuild && format('type=registry,ref={0}:buildcache', env.IMAGE_REPO) || '' }}
+          cache-to: ${{ !inputs.force-rebuild && format('type=registry,ref={0}:buildcache,mode=max', env.IMAGE_REPO) || '' }}
+
+      - name: Replace Git tag
+        if: ${{ inputs.force-rebuild }}
+        env:
+          UPSTREAM_TAG: ${{ needs.check-version.outputs.tag }}
+        run: git push --force origin "HEAD:refs/tags/$UPSTREAM_TAG"
 
       - name: Publish GitHub Release
         uses: ncipollo/release-action@v1.20.0
@@ -109,14 +130,17 @@ jobs:
           commit: ${{ github.sha }}
           generateReleaseNotes: true
           makeLatest: true
-          skipIfReleaseExists: true
+          allowUpdates: ${{ inputs.force-rebuild || false }}
+          skipIfReleaseExists: ${{ !inputs.force-rebuild }}
 
       - name: Record successful version
+        if: ${{ !inputs.force-rebuild }}
         env:
           UPSTREAM_TAG: ${{ needs.check-version.outputs.tag }}
         run: printf '%s\n' "$UPSTREAM_TAG" > "$RUNNER_TEMP/code-server-release-version"
 
       - name: Cache successful version
+        if: ${{ !inputs.force-rebuild }}
         uses: actions/cache/save@v6
         with:
           path: ${{ runner.temp }}/code-server-release-version
